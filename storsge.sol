@@ -1,0 +1,50 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.30;
+
+contract MessageRegistry {
+   //struct to store message data_
+   struct message {
+      address sender;
+      string content;
+      uint256 id;
+      uint256 timestamp;
+   }
+
+   
+    // Array to store all messages
+message[] public      messages;
+   
+    // Mapping to track message counts per address
+mapping (address => uint256) public MessageCount;
+        
+    // Event to log when a new message is registered
+      event messageRegistred(
+         uint256 indexed id,
+         address indexed  sender,
+         string content ,
+         uint256 timestamp
+      );
+
+      function registerMessage(string memory _content) public {
+         require (bytes(_content).length>0, "message cannot be empty");
+         require(bytes(_content).length <=200 , "message too long "
+
+      );
+
+      uint256 newId = messages.length;
+      message memory newMessage = message({
+         sender:  msg.sender,
+         content: _content,
+         timestamp: block.timestamp,
+         id: newId
+      });
+
+      messages.push(newMessage);
+      MessageCount[msg.sender]++;
+       
+      emit messageRegistred(newId, msg.sender, _content, block.timestamp);
+      }
+
+      
+
+   }
